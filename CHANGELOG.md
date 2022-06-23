@@ -115,6 +115,7 @@
   - [vsx-registry] removed deprecated `VSXExtensionsCommands` re-export [#11185](https://github.com/eclipse-theia/theia/pull/11185)
   - [workspace] removed deprecated `getDefaultWorkspacePath` [#11185](https://github.com/eclipse-theia/theia/pull/11185)
 - [search-in-workspace] updated `replaceResult` and `confirmReplaceAll` to now require a parameter `replacementText` [#11374](https://github.com/eclipse-theia/theia/pull/11374)
+- [variable-resolver] The interface `VariableResolveOptions` was updated to remove `checkAllResolved` and introduce `trackEscape` [#11332](https://github.com/eclipse-theia/theia/pull/11332)
 
 ## v1.26.0 - 5/26/2022
 
