@@ -20,7 +20,7 @@ import { injectable, inject } from '@theia/core/shared/inversify';
 import { VariableRegistry } from './variable';
 import URI from '@theia/core/lib/common/uri';
 import { JSONExt, ReadonlyJSONValue } from '@theia/core/shared/@phosphor/coreutils';
-import { CommandIdVariables } from '../common/variable-types';
+import { CommandIdVariables, InteractionsAggregatedState } from '../common/variable-types';
 
 export interface VariableResolveOptions {
     context?: URI;
@@ -30,8 +30,8 @@ export interface VariableResolveOptions {
     configurationSection?: string;
     commandIdVariables?: CommandIdVariables;
     configuration?: unknown;
-    // Track `escape` from variable resolution e.g. from an interactive command
-    trackEscape?: string[]
+    // Track an aggregated result from user interactions e.g. from interactive commands
+    interactionsState?: InteractionsAggregatedState;
 }
 
 /**
@@ -65,7 +65,7 @@ export class VariableResolverService {
     async resolve<T>(value: T, options: VariableResolveOptions = {}): Promise<T | undefined> {
         const context = new VariableResolverService.Context(this.variableRegistry, options);
         const resolved = await this.doResolve(value, context);
-        if (context.hasEscaped()) {
+        if (context.isInteractionsNOK()) {
             return undefined;
         }
         return resolved as any;
@@ -150,8 +150,8 @@ export namespace VariableResolverService {
             return true;
         }
 
-        hasEscaped(): boolean {
-            return this.options.trackEscape ? this.options.trackEscape.length > 0 : false;
+        isInteractionsNOK(): boolean {
+            return this.options.interactionsState ? this.options.interactionsState.isNOK() : false;
         }
 
         async resolve(name: string): Promise<void> {
@@ -175,7 +175,7 @@ export namespace VariableResolverService {
                         this.options.configurationSection,
                         this.options.commandIdVariables,
                         this.options.configuration,
-                        this.options.trackEscape
+                        this.options.interactionsState
                     ));
                 // eslint-disable-next-line no-null/no-null
                 const stringValue = value !== undefined && value !== null && JSONExt.isPrimitive(value as ReadonlyJSONValue) ? String(value) : undefined;

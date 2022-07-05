@@ -38,6 +38,7 @@ import { TaskIdentifier } from '@theia/task/lib/common';
 import { DebugSourceBreakpoint } from './model/debug-source-breakpoint';
 import { DebugFunctionBreakpoint } from './model/debug-function-breakpoint';
 import * as monaco from '@theia/monaco-editor-core';
+import { InteractionsAggregatedState } from '@theia/variable-resolver/lib/common/variable-types';
 
 export interface WillStartDebugSession extends WaitUntilEvent {
 }
@@ -251,7 +252,7 @@ export class DebugSessionManager {
                 configurationSection: 'launch',
                 commandIdVariables,
                 configuration,
-                trackEscape: []
+                interactionsState: new InteractionsAggregatedState()
             });
 
             if (configuration) {

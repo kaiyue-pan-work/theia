@@ -17,7 +17,7 @@
 import { injectable } from '@theia/core/shared/inversify';
 import { Disposable, DisposableCollection, MaybePromise } from '@theia/core';
 import URI from '@theia/core/lib/common/uri';
-import { CommandIdVariables } from '../common/variable-types';
+import { CommandIdVariables, InteractionsAggregatedState } from '../common/variable-types';
 
 /**
  * Variable can be used inside of strings using ${variableName} syntax.
@@ -45,7 +45,7 @@ export interface Variable {
         configurationSection?: string,
         commandIdVariables?: CommandIdVariables,
         configuration?: unknown,
-        trackEscape?: string[],
+        interactionsState?: InteractionsAggregatedState,
     ): MaybePromise<Object | undefined>;
 }
 

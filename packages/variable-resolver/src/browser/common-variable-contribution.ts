@@ -76,7 +76,7 @@ export class CommonVariableContribution implements VariableContribution {
         });
         variables.registerVariable({
             name: 'command',
-            resolve: async (_, name, __, commandIdVariables, configuration, trackEscape) => {
+            resolve: async (_, name, __, commandIdVariables, configuration, interactionsState) => {
                 let commandId = name;
                 if (name && commandIdVariables) {
                     const mappedValue = commandIdVariables[name];
@@ -84,8 +84,8 @@ export class CommonVariableContribution implements VariableContribution {
                 }
                 const result = commandId && await this.commands.executeCommand(commandId, configuration);
                 // eslint-disable-next-line no-null/no-null
-                if (trackEscape && commandId && result === null) {
-                    trackEscape.push(commandId);
+                if (interactionsState && commandId && result === null) {
+                    interactionsState.setNOK('NOK');
                 }
                 return result;
             }
